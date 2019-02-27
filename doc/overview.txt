@@ -12,10 +12,38 @@ To run test client:
     
 * no jvm options are required    
 
-See 
+See also: 
     test_20190227_1310.txt for output from verbose run of server app.
     visualVM.png for screen shot of profiling instance
 
+
+Architeture:
+    processing concurrent messages from multiple sources (threads) 
+    uses pipeline to process using blocking queues
+        multiple threads can add to queue
+        single thread processes the queue, determining uniqueness of values, if so then sends to 
+        queue that another thread will write data to a file.
+
+Pipeline:  threads used
+        T1          T1                        T2               T3  
+    read data-> verify data -> queue -> check uniqueness -> write to log        
+    
+Concerns:
+    concurrency issues, context switching
+        eliminated by use multiple threads to manage specific functions in the "pipeline"
+    structure to identify unique values, from 0 to 10e9
+        only used by one thread, does not require locking
+    managing connected clients
+        uses lock to manager active collection
+    queue overload / waiting to add to queue
+        using linked list
+        counters have been added that can be queried to find out if queue are getting full        
+    I/O bound concerns
+        input from client is verified and put in queue so that thread can continue reading data
+        writing to log file - data to be written is queued for a single thread to write to file.
+                                    
+        
+        
 
 Code structure:
     com.challenge.*
