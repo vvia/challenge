@@ -53,7 +53,7 @@ public abstract class ServerSocketController {
     private int idNext;
     
     /** string value that can be used by client to stop the server */
-    private static final String TerminateText = "teminate";
+    private static final String TerminateText = "terminate";
 
     
     /**
