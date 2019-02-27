@@ -46,13 +46,13 @@ public abstract class SocketController {
         if (!abStart.compareAndSet(false, true)) return;
 
         final InputStream is = socket.getInputStream();
-        final BufferedInputStream bis = new BufferedInputStream(is);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         
         // read input from client
         for (; abStart.get() ;) {
             try {
                 String text = reader.readLine();
+                if (text == null) break;
                 onReadLine(text);
             }
             catch (IOException e) {
@@ -65,8 +65,8 @@ public abstract class SocketController {
      * Called to close the socket.
      */
     public void stop() {
-        if (socket == null) return;
         if (!abStart.compareAndSet(true, false)) return;
+        if (socket == null) return;
         try {
             if (!socket.isClosed()) {
                 socket.close();

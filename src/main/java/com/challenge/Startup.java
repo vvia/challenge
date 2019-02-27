@@ -31,13 +31,19 @@ public class Startup {
      * Note: main thread is not "kept".  This will call start, which will create a new thread.
      */
     public static void main(String[] args) throws Exception {
+        boolean b = false;
+        for (int i=0; !b && args != null && i < args.length; i++) {
+            b = "verbose".equalsIgnoreCase(args[i]);
+        }
         
-        // start java logging.  Note: logging is not in any code path that needs to be performant.
-        Logger log = Logger.getLogger("");
-        log.setLevel(Level.FINE);
-        ConsoleHandler ch = new ConsoleHandler();
-        ch.setLevel(Level.FINE);
-        log.addHandler(ch);
+        if (b) {
+            // start java logging.  Note: logging is not in any code path that needs to be performant.
+            Logger log = Logger.getLogger("");
+            log.setLevel(Level.FINE);
+            ConsoleHandler ch = new ConsoleHandler();
+            ch.setLevel(Level.FINE);
+            log.addHandler(ch);
+        }
         
         Startup startup = new Startup();
         startup.start();

@@ -190,6 +190,7 @@ public class ServerController {
                 long msLastError = 0;
                 for ( ;abStart.get(); ) {
                     try {
+                        if (queLog.isEmpty()) writerLog.flush();
                         String text = queLog.take();
                         writerLog.println(text);
                     }

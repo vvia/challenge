@@ -90,7 +90,7 @@ public abstract class ServerSocketController {
                     catch (Exception e) {
                         cntError++;
                         long ms = System.currentTimeMillis();
-                        if (ms > msLastError + 5000) {
+                        if (ms > msLastError + 5000 && abStart.get()) {
                             LOG.log(Level.WARNING, "exception while accepting socket, total errors="+cntError+", will continue", e);
                             msLastError = ms;
                         }
@@ -195,11 +195,13 @@ public abstract class ServerSocketController {
     /**
      * Close a client connection.  This is called when stop is called or when a client sends invalid data.
      */
-    protected void close(SocketController cc) {
-        if (cc == null) return;
+    protected void close(SocketController sc) {
+        if (sc == null) return;
+        LOG.fine("closing client, id="+sc.getId());
         try {
+            sc.stop();
             rwLock.writeLock().lock();
-            boolean b = alClientController.remove(cc);
+            boolean b = alClientController.remove(sc);
         }
         finally {
             rwLock.writeLock().unlock();
@@ -214,10 +216,12 @@ public abstract class ServerSocketController {
      * @param cc connection that data is from
      * @param text input data
      */
-    protected void onReadLine(SocketController cc, String text) {
+    protected void onReadLine(SocketController sc, String text) {
+        if (sc == null) return;
         if (!isValidText(text)) {
             if (TerminateText.equals(text)) onTerminateCalled();
-            close(cc);
+            else LOG.fine("invalid text, client.id="+sc.getId()+", text="+text);
+            close(sc);
         }
         else {
             onReadValidText(text);
@@ -228,11 +232,10 @@ public abstract class ServerSocketController {
      * Called when a client connection has an exception.  
      * This will call close, and remove it from the live list and close the socket.
      */
-    protected void onException(SocketController cc, IOException e) {
-        cc.stop();
-        synchronized (alClientController) {
-            alClientController.remove(cc);
-        }
+    protected void onException(SocketController sc, IOException e) {
+        if (sc == null) return;
+        LOG.fine("client exception, id="+sc.getId()+", exception="+e);
+        close(sc);
     }
 
     /**
