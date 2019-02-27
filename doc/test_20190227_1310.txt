@@ -1,0 +1,135 @@
+
+
+This the server verbose output when a client app makes 7 connections and sends random 9 digit strings.
+
+The server only accepts 5 connections, so 2 are dropped.
+
+The 5 others generate data for 120 seconds.
+
+The server reports every 10 seconds, showing that there are 8+ million messages received for each 10 second interval.
+
+see visualVM.png for last 30 seconds
+ 
+ 
+==========================================
+
+Feb 27, 2019 1:06:38 PM com.challenge.Startup start
+FINE: Start called, creating server controller
+Feb 27, 2019 1:06:38 PM com.challenge.Startup start
+FINE: Starting server controller
+Feb 27, 2019 1:06:38 PM com.challenge.ServerController start
+FINE: start called, isAlreadyStarted=false
+Feb 27, 2019 1:06:38 PM com.challenge.ServerController start
+FINE: started thread ServerController.ProcessNumbers
+Feb 27, 2019 1:06:38 PM com.challenge.ServerController start
+FINE: started thread ServerController.Reporter
+Feb 27, 2019 1:06:38 PM com.challenge.ServerController start
+FINE: started thread ServerController.Logger
+Feb 27, 2019 1:06:38 PM com.challenge.ServerSocketController <init>
+FINE: requiredDigits=9
+Feb 27, 2019 1:06:38 PM com.challenge.ServerSocketController start
+FINE: start called, isAlreadyStarted=false
+Feb 27, 2019 1:06:38 PM com.challenge.ServerSocketController start
+FINE: new server socket on port 4000
+Feb 27, 2019 1:06:38 PM com.challenge.ServerSocketController start
+FINE: start completed
+Feb 27, 2019 1:06:38 PM com.challenge.ServerController start
+FINE: start process completed
+Feb 27, 2019 1:06:38 PM com.challenge.Startup start
+FINE: Start completed
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50454,localport=4000]
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=0
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection is allowed, creating thread to read from it
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection completed, new thread=ClientSocket.0
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50455,localport=4000]
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=1
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection is allowed, creating thread to read from it
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection completed, new thread=ClientSocket.1
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50456,localport=4000]
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=2
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection is allowed, creating thread to read from it
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection completed, new thread=ClientSocket.2
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50457,localport=4000]
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=3
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection is allowed, creating thread to read from it
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection completed, new thread=ClientSocket.3
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50458,localport=4000]
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=4
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection is allowed, creating thread to read from it
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection completed, new thread=ClientSocket.4
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50459,localport=4000]
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=5
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: connection is not allowed, will close the socket
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50460,localport=4000]
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=5
+Feb 27, 2019 1:06:40 PM com.challenge.ServerSocketController onNewSocket
+FINE: connection is not allowed, will close the socket
+Received 4,919,813 unique numbers, 12,294 duplicates, Unique total: 4,919,813, total read: 4,932,107
+Received 9,014,197 unique numbers, 85,387 duplicates, Unique total: 13,934,050, total read: 14,031,691
+Received 9,176,462 unique numbers, 173,065 duplicates, Unique total: 23,110,472, total read: 23,381,218
+Received 8,995,242 unique numbers, 255,219 duplicates, Unique total: 32,105,792, total read: 32,631,679
+Received 9,008,845 unique numbers, 342,947 duplicates, Unique total: 41,114,559, total read: 41,983,471
+Received 8,412,835 unique numbers, 399,524 duplicates, Unique total: 49,530,380, total read: 50,795,830
+Received 8,555,323 unique numbers, 487,187 duplicates, Unique total: 58,082,717, total read: 59,838,340
+Received 8,253,967 unique numbers, 547,819 duplicates, Unique total: 66,336,737, total read: 68,640,126
+Received 8,445,336 unique numbers, 640,759 duplicates, Unique total: 74,782,020, total read: 77,726,221
+Received 7,942,807 unique numbers, 677,930 duplicates, Unique total: 82,724,827, total read: 86,346,958
+Received 8,392,654 unique numbers, 797,712 duplicates, Unique total: 91,117,481, total read: 95,537,324
+Received 8,414,124 unique numbers, 886,308 duplicates, Unique total: 99,531,659, total read: 104,837,756
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController onReadLine
+FINE: invalid text, client.id=1, text=END
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController close
+FINE: closing client, id=1
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController onReadLine
+FINE: invalid text, client.id=4, text=END
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController close
+FINE: closing client, id=4
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController onReadLine
+FINE: invalid text, client.id=0, text=END
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController close
+FINE: closing client, id=0
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController onReadLine
+FINE: invalid text, client.id=3, text=END
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController close
+FINE: closing client, id=3
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController onReadLine
+FINE: invalid text, client.id=2, text=END
+Feb 27, 2019 1:08:40 PM com.challenge.ServerSocketController close
+FINE: closing client, id=2
+Feb 27, 2019 1:08:42 PM com.challenge.ServerSocketController onNewSocket
+FINE: new client socket=Socket[addr=/127.0.0.1,port=50492,localport=4000]
+Feb 27, 2019 1:08:42 PM com.challenge.ServerSocketController onNewSocket
+FINE: isStarted=true, current connect count=0
+Feb 27, 2019 1:08:42 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection is allowed, creating thread to read from it
+Feb 27, 2019 1:08:42 PM com.challenge.ServerSocketController onNewSocket
+FINE: client connection completed, new thread=ClientSocket.5
+Feb 27, 2019 1:08:42 PM com.challenge.ServerSocketController stop
+FINE: stop called, isAlreadyStarted=true
+Feb 27, 2019 1:08:42 PM com.challenge.ServerSocketController stop
+FINE: stop completed

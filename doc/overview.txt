@@ -1,0 +1,56 @@
+
+
+Java 8
+Maven build (pom.xml)
+No dependent libraries
+
+To run server:
+    java -jar challenge-1.0.0.jar [verbose]
+    
+To run test client:
+    java -cp challenge-1.0.0.jar com.challenge.TestClient
+    
+* no jvm options are required    
+
+See 
+    test_20190227_1310.txt for output from verbose run of server app.
+    visualVM.png for screen shot of profiling instance
+
+
+Code structure:
+    com.challenge.*
+        Startup - reads arguments, creates serverController and calls it's start method.  The main thread is then kept in a sleep loop. 
+        ServerController - creates ServerSocketConroller, manages data received from clients, reporting every 10 seconds, and writing unique 9 digit 
+                  numbers to numbers.log, manages graceful shutdown when stop is called, which is also called when a terminate message is received.
+        ServerSocketController - creates a server socket for receiving client socket connections.  Verifies that a max of only 5 connections 
+                  are permitted at a time.  Handles input from clients, and disconnects client if data is invalid.  Also checks if a client
+                  has sent a terminate input.  For valid input, calls abstract method with data.  If terminate message is received, then it will call 
+                  abstract terminate method. 
+        SocketController - used to manage reading socket data, and then calling abstract method with data.                                   
+             
+            
+Application code overview
+    Startup 
+        checks args for "verbose"
+        -> set up logging to console
+        creates instance to manage server        
+        -> ServerController
+              creates one 
+              -> ServerSocketController to manage server socket
+                    -> creates server socket thread to accept client sockets
+                          creates one per client connection (max 5 simultaneous) 
+                          -> SocketController manage input sent from client
+              -> creates que+thread for managing valid input data (9 digit strings)
+              -> creates que+thread for writing unique numbers to log file (numbers.log)
+              -> creates thread that prints current status to output/console every 10 seconds
+              runs until cleint sends a "terminate" input string
+              -> stop, closes client sockets, server socket, and allows log writer thread to finish writing queue numbers.
+
+Test Client
+    Creates 7 threads and connections to server, expecting only 5 to be able to send data.  
+    All threads start at same time, each looping for 120 seconds, writing 9 digit strings as fast as possible.
+    After all of the threads (5) are done sending data, another socket is then created to send a "terminate" string.
+    The server will then perform a graceful shutdown.
+
+
+

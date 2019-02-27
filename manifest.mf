@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Permissions: all-permissions
+Codebase: *
+Application-Name: Challenge
+Implementation-Title: Code Challenge 
+Implementation-Version: 1.0.0
+Implementation-Vendor: Vendor ABC

@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +11,9 @@ import java.util.logging.Logger;
 
 /**
  * Test client to connect to server and send data.
+ * 
+ * Includes options to run many or one test client.
+ * 
  * @author vvia
  */
 public class TestClient {
@@ -21,7 +23,7 @@ public class TestClient {
         
     }
     
-    public void testMany(final int cnt) throws Exception {
+    public void testMany(final int cnt, final int numberOfSeconds) throws Exception {
     
         final CyclicBarrier barrier = new CyclicBarrier(cnt);
         final CountDownLatch countDownLatch = new CountDownLatch(cnt);
@@ -35,7 +37,7 @@ public class TestClient {
                         LOG.fine(id+" is created");
                         barrier.await();
                         LOG.fine(id+" is starting");
-                        testOne();
+                        testOne(numberOfSeconds);
                     }
                     catch (Exception e) {
                     }
@@ -48,7 +50,7 @@ public class TestClient {
         }
         
         LOG.fine("MAIN THREAD waiting on countDownLatch, cnt="+countDownLatch.getCount());
-        // countDownLatch.await(45, TimeUnit.SECONDS);
+        // countDownLatch.await(numberOfSeconds, TimeUnit.MILLISECONDS);
         countDownLatch.await();
         
         String s = "MAIN THREAD send terminate message, countDownLatch.cnt="+countDownLatch.getCount();
@@ -68,27 +70,28 @@ public class TestClient {
         LOG.fine("MAIN THREAD is DONE");
     }    
     
-    public void testOne() throws Exception {
+    public void testOne(int numberOfSeconds) throws Exception {
         Socket socket;
         socket = new Socket("localhost", 4000);
-        socket.setTcpNoDelay(true);
+        // socket.setTcpNoDelay(true);
 
         boolean b = socket.isClosed();
-            
-        
+
         OutputStream os = socket.getOutputStream();
         PrintWriter pw = new PrintWriter(new OutputStreamWriter(os));
 
         final int max = (int) Math.pow(10, 9);
         long ms = System.currentTimeMillis();
         for (int i=0; ; i++) {
-            if ( (System.currentTimeMillis() - ms) > 30000) break;
+            if ( (System.currentTimeMillis() - ms) > (numberOfSeconds * 1000)) break;
 
             double d = Math.random() * max;
             String s = String.format("%09d", (int)d);
             pw.println(s);
-            // if (pw.checkError()) break;  // cause decrease in performance 
-            // Thread.sleep(1 * 1000);            
+            if (i % 1000 == 0 && pw.checkError()) { // causes decrease in performance
+                break;   
+            }
+            // Thread.sleep(1 * 1000);
         }
         
         // tcp/ip does not have a real-time way to determine disconnect, so sending invalid data to trigger server side socket close
@@ -108,7 +111,7 @@ public class TestClient {
         
         LOG.fine("TestClient is starting, will create 7 clients");
         TestClient tc = new TestClient();
-        tc.testMany(7);
+        tc.testMany(7, 120);
         // tc.testOne();
         LOG.fine("TestClient is DONE");
     }

@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.BitSet;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.*;
@@ -78,6 +80,12 @@ public class ServerController {
      */
     private AtomicInteger aiInputQueueWait = new AtomicInteger();
     private AtomicInteger aiOutputQueueWait = new AtomicInteger();
+
+    /**
+     * used to gracefully shutdown
+     */
+    private CountDownLatch countDownLatch;
+
     
     
     /**
@@ -184,6 +192,8 @@ public class ServerController {
         File file = new File("numbers.log");
         writerLog = new PrintWriter(file);  // uses 8192 buffer by default, does not incude auto flushing on newline
         
+        countDownLatch = new CountDownLatch(1);
+        
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -192,6 +202,7 @@ public class ServerController {
                     try {
                         if (queLog.isEmpty()) writerLog.flush();
                         String text = queLog.take();
+                        if (text.length() == 0) continue;
                         writerLog.println(text);
                     }
                     catch (Exception e) {
@@ -208,6 +219,9 @@ public class ServerController {
                 }
                 catch (Exception e) {
                     LOG.log(Level.WARNING, "exception while closing log", e);
+                }
+                finally {
+                    countDownLatch.countDown();
                 }
             }
         }, "ServerController.Logger");
@@ -229,6 +243,9 @@ public class ServerController {
         if (!abStart.compareAndSet(true, false)) return;
         try {
             getServerSocketController().stop();
+            // make sure logger thread cleans up log file.
+            queLog.offer(""); 
+            countDownLatch.await(10, TimeUnit.SECONDS);
         }
         catch (Exception e) {
             LOG.log(Level.WARNING, "exception while stopping", e);
