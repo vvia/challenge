@@ -17,33 +17,44 @@ See also:
     visualVM.png for screen shot of profiling instance
 
 
+
+
 Architeture:
-    processing concurrent messages from multiple sources (threads) 
-    uses pipeline to process using blocking queues
+    processes concurrent messages from multiple sources (threads) 
+    uses pipeline to process, using blocking queues
         multiple threads can add to queue
         single thread processes the queue, determining uniqueness of values, if so then sends to 
-        queue that another thread will write data to a file.
+        queue that another thread will write data to a file (I/O bound).
+
 
 Pipeline:  threads used
         T1          T1                        T2               T3  
     read data-> verify data -> queue -> check uniqueness -> write to log        
+
     
 Concerns:
     concurrency issues, context switching
         eliminated by use multiple threads to manage specific functions in the "pipeline"
-    structure to identify unique values, from 0 to 10e9
+    structure to identify unique values, from 0 to 10e9 (from 9 digit stings)
         only used by one thread, does not require locking
     managing connected clients
-        uses lock to manager active collection
+        uses lock to manage active collection
     queue overload / waiting to add to queue
         using linked list
-        counters have been added that can be queried to find out if queue are getting full        
+        counters have been added that can be queried to find out if queues are getting full
+           and causing wait.        
     I/O bound concerns
-        input from client is verified and put in queue so that thread can continue reading data
-        writing to log file - data to be written is queued for a single thread to write to file.
-                                    
-        
-        
+        input from client is verified and put in queue so that thread can continue reading data from client socket.
+        writing to log file - data to be written is queued for a single thread to write to file.  Uses linked list.
+    graceful shutdown, no loss of data
+        shutdown will allow thread that writes to log file time to complete.
+    attacks
+        no code has been added to check for DOS or other types of attacks.
+        code could be expanded to add this type of support.
+    unreliable protocol
+        current system allows for one way data flow over socket, making it more difficult to manage connection health.
+        code could include simple two way flow to allow for health checks, etc.                                                        
+
 
 Code structure:
     com.challenge.*
