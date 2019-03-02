@@ -4,9 +4,12 @@ Java 8
 Maven build (pom.xml)
 No dependent libraries
 
-To run server:
+To run server using Java:
     java -jar challenge-1.0.0.jar [verbose]
-    
+
+To run server using Docker:
+    docker run -p 4000:4000/tcp vvia/challenge:1.0.0
+
 To run test client:
     java -cp challenge-1.0.0.jar com.challenge.TestClient
     

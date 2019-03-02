@@ -1,0 +1,16 @@
+
+
+$ docker run --name chalz -p 4000:4000/tcp vvia/challenge:1.0.0
+Received 36,934 unique numbers, 1 duplicates, Unique total: 36,943, total read: 36,935
+Received 6,974,320 unique numbers, 24,576 duplicates, Unique total: 7,011,307, total read: 7,035,831
+Received 10,730,911 unique numbers, 134,746 duplicates, Unique total: 17,742,169, total read: 17,901,488
+Received 9,681,208 unique numbers, 223,505 duplicates, Unique total: 27,423,415, total read: 27,806,201
+Received 9,969,415 unique numbers, 333,582 duplicates, Unique total: 37,392,840, total read: 38,109,198
+Received 10,684,369 unique numbers, 477,057 duplicates, Unique total: 48,077,157, total read: 49,270,624
+Received 10,296,400 unique numbers, 579,383 duplicates, Unique total: 58,373,593, total read: 60,146,407
+Received 9,805,085 unique numbers, 662,565 duplicates, Unique total: 68,178,642, total read: 70,614,057
+Received 9,859,272 unique numbers, 779,107 duplicates, Unique total: 78,037,960, total read: 81,252,436
+Received 9,437,249 unique numbers, 851,938 duplicates, Unique total: 87,475,227, total read: 91,541,623
+Received 9,676,660 unique numbers, 984,802 duplicates, Unique total: 97,151,877, total read: 102,203,085
+Received 8,903,195 unique numbers, 1,007,399 duplicates, Unique total: 106,055,059, total read: 112,113,679
+Received 8,317,563 unique numbers, 1,030,312 duplicates, Unique total: 114,372,581, total read: 121,461,554
